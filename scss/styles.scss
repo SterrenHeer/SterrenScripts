@@ -1,0 +1,9 @@
+@import 'base/variables';
+
+.container {
+	max-width: 1644px;
+	width: 85.625%;
+    margin: 0 auto;
+}
+
+@import 'blocks/slider';
