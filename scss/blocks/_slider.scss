@@ -1,0 +1,18 @@
+.slider {
+    &_container {
+        background: $block-color;
+    }
+    &_wrapper {
+        overflow: hidden;
+        height: 125px;
+    }
+    &_field {
+        display: flex;
+    }
+    &_controls {
+        display: flex;
+    }
+    &_prev, &_next {
+        background: $second-color;
+    }
+}
