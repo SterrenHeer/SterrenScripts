@@ -11,6 +11,7 @@
     }
     &_controls {
         display: flex;
+        justify-content: space-between;
     }
     &_prev, &_next {
         background: $second-color;
