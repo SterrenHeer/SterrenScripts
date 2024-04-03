@@ -1,17 +1,17 @@
-function slider({container, slide, nextSlide, prevSlide, wrapper, field}) {
-    let slideIndex = 1;
-    let offset = 0;
-    const slides = document.querySelectorAll(slide),
-        slider = document.querySelector(container),
-        prev = document.querySelector(prevSlide),
-        next = document.querySelector(nextSlide),
-        slidesWrapper = document.querySelector(wrapper),
-        slidesField = document.querySelector(field);
+function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass}) {
+    let slideIndex = 1,
+    	offset = 0;
+    const slides = document.querySelectorAll(slideSelector),
+		container = document.querySelector(containerSelector),
+        prev = document.querySelector(prevSlideSelector),
+        next = document.querySelector(nextSlideSelector),
+        wrapper = document.querySelector(wrapperSelector),
+        field = document.querySelector(fieldSelector);
 	
-	let width = window.getComputedStyle(slidesWrapper).width;
+	let width = window.getComputedStyle(wrapper).width;
 	width = Math.floor(deleteNotDigits(width)) + 'px';
 
-    slidesField.style.width = 100 * slides.length + "%";
+    field.style.width = 100 * slides.length + "%";
 
     slides.forEach((slide) => {
 		slide.style.width = width;
@@ -37,6 +37,7 @@ function slider({container, slide, nextSlide, prevSlide, wrapper, field}) {
 		} else {
 			slideIndex++;
 		}
+		changeActivity()
     }
 
     function movePrev() {
@@ -51,6 +52,11 @@ function slider({container, slide, nextSlide, prevSlide, wrapper, field}) {
 		} else {
 			slideIndex--;
 		}
+		changeActivity()
+    }
+
+	function changeActivity() {
+        field.style.transform = `translateX(-${offset}px)`;
     }
 
     function deleteNotDigits(str) {
