@@ -6,8 +6,10 @@ function slider({container, slide, nextSlide, prevSlide, wrapper, field}) {
         prev = document.querySelector(prevSlide),
         next = document.querySelector(nextSlide),
         slidesWrapper = document.querySelector(wrapper),
-        slidesField = document.querySelector(field),
-        width = window.getComputedStyle(slidesWrapper).width;
+        slidesField = document.querySelector(field);
+	
+	let width = window.getComputedStyle(slidesWrapper).width;
+	width = Math.floor(deleteNotDigits(width)) + 'px';
 
     slidesField.style.width = 100 * slides.length + "%";
 
