@@ -1,6 +1,7 @@
-function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass}) {
+function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, duration = 0}) {
     let slideIndex = 1,
     	offset = 0,
+		timer = 0,
 		dots = [];
     const slides = document.querySelectorAll(slideSelector),
 		container = document.querySelector(containerSelector),
@@ -39,15 +40,20 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
             slideIndex = slideTo;
             offset = deleteNotDigits(width) * (slideTo - 1);
             changeActivity();
+			makeTimer(duration);
         });
     });
 
+	makeTimer(duration);
+
     next.addEventListener("click", () => {
 		moveNext();
+		makeTimer(duration);
 	});
 
     prev.addEventListener("click", () => {
 		movePrev();
+		makeTimer(duration);
 	});
 
 	function moveNext() {
@@ -62,7 +68,7 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 		} else {
 			slideIndex++;
 		}
-		changeActivity()
+		changeActivity();
     }
 
     function movePrev() {
@@ -77,13 +83,21 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 		} else {
 			slideIndex--;
 		}
-		changeActivity()
+		changeActivity();
     }
 
 	function changeActivity() {
         field.style.transform = `translateX(-${offset}px)`;
 		dots.forEach(dot => dot.classList.remove('slider_active'));
         dots[slideIndex-1].classList.add('slider_active');
+    }
+
+	function makeTimer(duration){
+        if (duration == 0) {
+            return;
+        }
+        clearInterval(timer);
+        timer = setInterval(moveNext, duration);
     }
 
     function deleteNotDigits(str) {

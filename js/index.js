@@ -9,5 +9,6 @@ window.addEventListener('DOMContentLoaded', function() {
         wrapperSelector: '.slider_wrapper',
         fieldSelector: '.slider_field',
         indicatorsClass: 'slider_indicators',
+        duration: 3000,
     });
 });

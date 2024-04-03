@@ -2,9 +2,9 @@
     &_container {
         background: $block-color;
         border-radius: 10px;
+        padding: 10px;
     }
     &_wrapper {
-        margin: 10px;
         overflow: hidden;
         min-height: 125px;
     }
@@ -16,7 +16,6 @@
         justify-content: space-between;
     }
     &_prev, &_next {
-        margin: 10px;
         padding: 3px 12px;
         background: $second-color;
         border-radius: 10px;
@@ -30,7 +29,6 @@
         list-style: none;
     }
     &_dot {
-        margin: 10px 0;
         width: 30px;
         height: 10px;
         border-radius: 10px;
@@ -39,5 +37,8 @@
     }
     &_active {
         background: $second-color;
+    }
+    .title {
+        margin: 10px 0;
     }
 }
