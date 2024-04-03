@@ -6,7 +6,7 @@
     &_wrapper {
         margin: 10px;
         overflow: hidden;
-        height: 125px;
+        min-height: 125px;
     }
     &_field {
         display: flex;
@@ -21,5 +21,23 @@
         background: $second-color;
         border-radius: 10px;
         color: $bg-color;
+        cursor: pointer;
+    }
+    &_indicators {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        list-style: none;
+    }
+    &_dot {
+        margin: 10px 0;
+        width: 30px;
+        height: 10px;
+        border-radius: 10px;
+        background: $main-color;
+        cursor: pointer;
+    }
+    &_active {
+        background: $second-color;
     }
 }
