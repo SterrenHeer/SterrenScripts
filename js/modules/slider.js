@@ -2,6 +2,7 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
     let slideIndex = 1,
     	offset = 0,
 		timer = 0,
+		mobile = window.matchMedia('(max-width: 768px)').matches,
 		dots = [];
     const slides = document.querySelectorAll(slideSelector),
 		container = document.querySelector(containerSelector),
@@ -25,6 +26,7 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 
 	for (let i = 0; i < slides.length; i++) {
         const dot = document.createElement('div');
+		mobile ? dot.style.width = 100 / slides.length + '%' : dot.style.width = '';
         dot.setAttribute('data-slide-to', i + 1);
         dot.classList.add('slider_dot');
         if (i == 0) {
@@ -45,6 +47,22 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
     });
 
 	makeTimer(duration);
+
+	window.addEventListener('resize', (e) => {
+        width = window.getComputedStyle(wrapper).width;
+        width = Math.floor(deleteNotDigits(width)) + 'px';
+        slides.forEach((slide) => {
+            slide.style.width = width;
+        });
+		mobile = window.matchMedia('(max-width: 768px)').matches;
+        let dots = document.querySelectorAll('.slider_dot');
+        dots.forEach((dot) => {
+            mobile ? dot.style.width = 100 / slides.length + '%' : dot.style.width = '';
+        });
+        slideIndex = 1,
+        offset = 0,
+        changeActivity();
+    }); 
 
     next.addEventListener("click", () => {
 		moveNext();

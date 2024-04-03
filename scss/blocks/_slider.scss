@@ -23,6 +23,7 @@
         cursor: pointer;
     }
     &_indicators {
+        margin-top: 10px;
         display: flex;
         justify-content: center;
         gap: 8px;
@@ -40,5 +41,15 @@
     }
     .title {
         margin: 10px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .slider {
+        &_indicators {
+            gap: 0;
+            background: $main-color;
+            border-radius: 10px;
+        }
     }
 }
