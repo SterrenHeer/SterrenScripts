@@ -10,5 +10,6 @@ window.addEventListener('DOMContentLoaded', function() {
         fieldSelector: '.slider_field',
         indicatorsClass: 'slider_indicators',
         duration: 3000,
+        swipe: true,
     });
 });
