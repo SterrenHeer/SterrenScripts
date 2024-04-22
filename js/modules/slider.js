@@ -1,8 +1,10 @@
-function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, duration = 0, swipe = false}) {
+function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, elementsPerPage = 1, elementsPerPageMobile = 1, duration = 0, swipe = false}) {
     let slideIndex = 1,
     	offset = 0,
 		timer = 0,
-		mobile = window.matchMedia('(max-width: 768px)').matches,
+        perPage = 1,
+		mobile = window.matchMedia('(max-width: 992px)').matches,
+        templates = [],
 		dots = [];
     const slides = document.querySelectorAll(slideSelector),
 		container = document.querySelector(containerSelector),
@@ -10,15 +12,21 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         next = document.querySelector(nextSlideSelector),
         wrapper = document.querySelector(wrapperSelector),
         field = document.querySelector(fieldSelector);
-	
-	let width = window.getComputedStyle(wrapper).width;
-	width = Math.floor(deleteNotDigits(width)) + 'px';
 
-    field.style.width = 100 * slides.length + "%";
+    let baseSlides = slides;
+    mobile ? perPage = elementsPerPageMobile : perPage = elementsPerPage;
+	let width = Math.floor(deleteNotDigits(window.getComputedStyle(wrapper).width)) / perPage + 'px';
 
-    slides.forEach((slide) => {
+    field.style.width = 100 * (slides.length + perPage - 1) / perPage + "%";
+
+    slides.forEach((slide, index) => {
 		slide.style.width = width;
+        templates[index] = slide;
 	});
+
+    for (let i = 0; i < (perPage - 1); i++) {
+        field.append(templates[i + 1].cloneNode(true));
+    }
 
     if (indicatorsClass) {
         let indicators = document.createElement('div');
@@ -51,10 +59,20 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 	makeTimer(duration);
 
 	window.addEventListener('resize', (e) => {
-        width = window.getComputedStyle(wrapper).width;
-        width = Math.floor(deleteNotDigits(width)) + 'px';
-        mobile = window.matchMedia('(max-width: 768px)').matches;
-        slides.forEach((slide) => {
+        mobile = window.matchMedia('(max-width: 992px)').matches;
+        mobile ? perPage = elementsPerPageMobile : perPage = elementsPerPage;
+        width = Math.floor(deleteNotDigits(window.getComputedStyle(wrapper).width) / perPage) + 'px'
+        field.style.width = 100 * (slides.length + perPage - 1) / perPage + "%";
+
+        while (field.childElementCount > baseSlides.length) {
+            field.removeChild(field.lastElementChild)
+        }
+        for (let i = 0; i < (perPage - 1); i++) {
+            field.append(templates[i + 1].cloneNode(true));
+        }
+
+        let slidesNew = document.querySelectorAll(slideSelector);
+        slidesNew.forEach((slide) => {
             slide.style.width = width;
         });
         
