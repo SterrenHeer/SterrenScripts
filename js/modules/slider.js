@@ -1,4 +1,4 @@
-function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, elementsPerPage = 1, elementsPerPageMobile = 1, duration = 0, swipe = false}) {
+function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, elementsPerPage = 1, elementsPerPageMobile = 1, rowGap = 0, duration = 0, swipe = false}) {
     let slideIndex = 1,
     	offset = 0,
 		timer = 0,
@@ -21,6 +21,9 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 
     slides.forEach((slide, index) => {
 		slide.style.width = width;
+        if (index != 0) {
+            slide.style.paddingLeft = rowGap + 'px';
+        }
         templates[index] = slide;
 	});
 
@@ -72,8 +75,11 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         }
 
         let slidesNew = document.querySelectorAll(slideSelector);
-        slidesNew.forEach((slide) => {
+        slidesNew.forEach((slide, index) => {
             slide.style.width = width;
+            if (index != 0) {
+                slide.style.paddingLeft = rowGap + 'px';
+            }
         });
         
         if (indicatorsClass) {
