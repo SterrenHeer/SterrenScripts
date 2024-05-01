@@ -94,15 +94,19 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         changeActivity();
     }); 
 
-    next.addEventListener("click", () => {
-		moveNext();
-		makeTimer(duration);
-	});
+    if (nextSlideSelector) {
+        next.addEventListener("click", () => {
+            moveNext();
+            makeTimer(duration);
+        });
+    }
 
-    prev.addEventListener("click", () => {
-		movePrev();
-		makeTimer(duration);
-	});
+    if (prevSlideSelector) {
+        prev.addEventListener("click", () => {
+            movePrev();
+            makeTimer(duration);
+        });
+    }
 
 	function moveNext() {
         if (offset == deleteNotDigits(width) * (slides.length - 1)) {
