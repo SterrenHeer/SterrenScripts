@@ -5,6 +5,7 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         perPage = 1,
 		mobile = window.matchMedia('(max-width: 992px)').matches,
         templates = [],
+        mainClass,
 		dots = [];
     const slides = document.querySelectorAll(slideSelector),
 		container = document.querySelector(containerSelector),
@@ -12,6 +13,10 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         next = document.querySelector(nextSlideSelector),
         wrapper = document.querySelector(wrapperSelector),
         field = document.querySelector(fieldSelector);
+
+    if (indicatorsClass) {
+        mainClass = indicatorsClass.slice(0, -11);
+    }
 
     let baseSlides = slides;
     mobile ? perPage = elementsPerPageMobile : perPage = elementsPerPage;
@@ -40,9 +45,9 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
             const dot = document.createElement('div');
             mobile ? dot.style.width = 100 / slides.length + '%' : dot.style.width = '';
             dot.setAttribute('data-slide-to', i + 1);
-            dot.classList.add('slider_dot');
+            dot.classList.add(`${mainClass}_dot`);
             if (i == 0) {
-                dot.classList.add('slider_active');
+                dot.classList.add(`${mainClass}_active`);
             } 
             indicators.append(dot);
             dots.push(dot);
@@ -83,7 +88,7 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         });
         
         if (indicatorsClass) {
-            let dots = document.querySelectorAll('.slider_dot');
+            let dots = document.querySelectorAll(`.${mainClass}_dot`);
             dots.forEach((dot) => {
                 mobile ? dot.style.width = 100 / slides.length + '%' : dot.style.width = '';
             });
@@ -141,8 +146,8 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 	function changeActivity() {
         field.style.transform = `translateX(-${offset}px)`;
         if (indicatorsClass) {
-            dots.forEach(dot => dot.classList.remove('slider_active'));
-            dots[slideIndex-1].classList.add('slider_active');
+            dots.forEach(dot => dot.classList.remove(`${mainClass}_active`));
+            dots[slideIndex-1].classList.add(`${mainClass}_active`);
         }
     }
 
