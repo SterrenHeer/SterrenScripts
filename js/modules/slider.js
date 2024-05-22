@@ -4,6 +4,8 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 		timer = 0,
         perPage = 1,
         gap = 0,
+        startX,
+        endX,
 		mobile = window.matchMedia('(max-width: 992px)').matches,
         templates = [],
         mainClass,
@@ -98,6 +100,7 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         slideIndex = 1,
         offset = 0,
         changeActivity();
+        onSwipe();
     }); 
 
     if (nextSlideSelector) {
@@ -164,29 +167,29 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         return +str.replace(/[^\d\.]/g, '');
     }
 
-    if (swipe) {
-        let startX;
-        let endX;
+    const start = (e) => {
+        startX = e.pageX || e.touches[0].pageX;	
+    }
 
-        const start = (e) => {
-            startX = e.pageX || e.touches[0].pageX;	
+    const end = () => {
+        let distance = 20;
+        if (endX < startX && Math.abs(startX - endX) > distance) {
+            moveNext();
+            makeTimer(duration);
+        }  
+        if (endX > startX && Math.abs(endX - startX) > distance) {
+            movePrev();
+            makeTimer(duration);
         }
+    }
 
-        const end = () => {
-            if (endX < startX) {
-                moveNext();
-                makeTimer(duration);
-            }  
-            if (endX > startX) {
-                movePrev();
-                makeTimer(duration);
-            }
-        }
+    const move = (e) => {
+        endX = e.pageX || e.touches[0].pageX;
+    }
 
-        const move = (e) => {
-            endX = e.pageX || e.touches[0].pageX;
-        }
+    onSwipe()
 
+    function onSwipe() {
         field.addEventListener('mousedown', start);
         field.addEventListener('touchstart', start, {passive: true});
 
@@ -195,6 +198,17 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 
         field.addEventListener('mouseup', end);
         field.addEventListener('touchend', end);
+
+        if (!swipe || !mobile) {
+            field.removeEventListener('mousedown', start);
+            field.removeEventListener('touchstart', start, {passive: true});
+    
+            field.removeEventListener('mousemove', move);
+            field.removeEventListener('touchmove', move, {passive: true});
+    
+            field.removeEventListener('mouseup', end);
+            field.removeEventListener('touchend', end);
+        }
     }
 }
 
