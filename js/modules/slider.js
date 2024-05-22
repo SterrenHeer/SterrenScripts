@@ -1,8 +1,9 @@
-function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, elementsPerPage = 1, elementsPerPageMobile = 1, rowGap = 0, duration = 0, swipe = false}) {
+function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, elementsPerPage = 1, elementsPerPageMobile = 1, columnGap = 0, duration = 0, swipe = false}) {
     let slideIndex = 1,
     	offset = 0,
 		timer = 0,
         perPage = 1,
+        gap = 0,
 		mobile = window.matchMedia('(max-width: 992px)').matches,
         templates = [],
         mainClass,
@@ -20,15 +21,15 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 
     let baseSlides = slides;
     mobile ? perPage = elementsPerPageMobile : perPage = elementsPerPage;
-	let width = Math.floor(deleteNotDigits(window.getComputedStyle(wrapper).width)) / perPage + 'px';
+    mobile ? gap = columnGap / 2 : gap = columnGap;
+    perPage == 1 ? gap = 0 : gap = gap;
+	let width = Math.floor(deleteNotDigits(window.getComputedStyle(wrapper).width) / perPage - (gap * (slides.length - 1) / slides.length)) + 'px';
 
     field.style.width = 100 * (slides.length + perPage - 1) / perPage + "%";
+    field.style.columnGap = gap + "px";
 
     slides.forEach((slide, index) => {
 		slide.style.width = width;
-        if (index != 0) {
-            slide.style.paddingLeft = rowGap + 'px';
-        }
         templates[index] = slide;
 	});
 
@@ -57,7 +58,7 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
             dot.addEventListener('click', (e) => {
                 const slideTo = e.target.getAttribute('data-slide-to');
                 slideIndex = slideTo;
-                offset = deleteNotDigits(width) * (slideTo - 1);
+                offset = (deleteNotDigits(width) + gap) * (slideTo - 1);
                 changeActivity();
                 makeTimer(duration);
             });
@@ -69,8 +70,11 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 	window.addEventListener('resize', (e) => {
         mobile = window.matchMedia('(max-width: 992px)').matches;
         mobile ? perPage = elementsPerPageMobile : perPage = elementsPerPage;
-        width = Math.floor(deleteNotDigits(window.getComputedStyle(wrapper).width) / perPage) + 'px'
+        mobile ? gap = columnGap / 2 : gap = columnGap;
+        perPage == 1 ? gap = 0 : gap = gap;
+        width = Math.floor(deleteNotDigits(window.getComputedStyle(wrapper).width) / perPage - (gap * (slides.length - 1) / slides.length)) + 'px';
         field.style.width = 100 * (slides.length + perPage - 1) / perPage + "%";
+        field.style.columnGap = gap + "px";
 
         while (field.childElementCount > baseSlides.length) {
             field.removeChild(field.lastElementChild)
@@ -82,9 +86,6 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         let slidesNew = document.querySelectorAll(slideSelector);
         slidesNew.forEach((slide, index) => {
             slide.style.width = width;
-            if (index != 0) {
-                slide.style.paddingLeft = rowGap + 'px';
-            }
         });
         
         if (indicatorsClass) {
@@ -114,10 +115,10 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
     }
 
 	function moveNext() {
-        if (offset == deleteNotDigits(width) * (slides.length - 1)) {
+        if (offset >= (deleteNotDigits(width) + gap) * (slides.length - 1)) {
 			offset = 0;
 		} else {
-			offset += deleteNotDigits(width);
+			offset += deleteNotDigits(width) + gap;
 		}
 
 		if (slideIndex == slides.length) {
@@ -129,10 +130,10 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
     }
 
     function movePrev() {
-        if (offset == 0) {
-			offset = deleteNotDigits(width) * (slides.length - 1);
+        if (offset < deleteNotDigits(width)) {
+			offset = (deleteNotDigits(width) + gap) * (slides.length - 1);
 		} else {
-			offset -= deleteNotDigits(width);
+			offset -= deleteNotDigits(width) + gap;
 		}
 
 		if (slideIndex == 1) {
@@ -192,7 +193,6 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         field.addEventListener('mousemove', move);
         field.addEventListener('touchmove', move, {passive: true});
 
-        field.addEventListener('mouseleave', end);
         field.addEventListener('mouseup', end);
         field.addEventListener('touchend', end);
     }

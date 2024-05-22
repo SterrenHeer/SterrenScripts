@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded', function() {
         indicatorsClass: 'slider_indicators',
         elementsPerPage: 4,
         elementsPerPageMobile: 2,
-        rowGap: 10,
+        columnGap: 10,
         duration: 3000,
         swipe: true,
     });
