@@ -14,5 +14,7 @@ window.addEventListener('DOMContentLoaded', function() {
         columnGap: 10,
         duration: 3000,
         swipe: true,
+        totalCounter: '#total',
+        currentCounter: '#current',
     });
 });

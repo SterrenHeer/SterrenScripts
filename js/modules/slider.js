@@ -1,4 +1,4 @@
-function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, elementsPerPage = 1, elementsPerPageMobile = 1, columnGap = 0, duration = 0, swipe = false}) {
+function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideSelector, wrapperSelector, fieldSelector, indicatorsClass, elementsPerPage = 1, elementsPerPageMobile = 1, columnGap = 0, duration = 0, swipe = false, totalCounter, currentCounter}) {
     let slideIndex = 1,
     	offset = 0,
 		timer = 0,
@@ -6,6 +6,8 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         gap = 0,
         startX,
         endX,
+        total,
+        current,
 		mobile = window.matchMedia('(max-width: 992px)').matches,
         templates = [],
         mainClass,
@@ -19,6 +21,14 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
 
     if (indicatorsClass) {
         mainClass = indicatorsClass.slice(0, -11);
+    }
+    if (totalCounter) {
+        total = document.querySelector(totalCounter);
+        total.textContent = slides.length;
+    }
+    if (currentCounter) {
+        current = document.querySelector(currentCounter)
+        current.textContent = slideIndex;
     }
 
     let baseSlides = slides;
@@ -152,6 +162,9 @@ function slider({containerSelector, slideSelector, nextSlideSelector, prevSlideS
         if (indicatorsClass) {
             dots.forEach(dot => dot.classList.remove(`${mainClass}_active`));
             dots[slideIndex-1].classList.add(`${mainClass}_active`);
+        }
+        if (currentCounter) {
+            current.textContent = slideIndex;
         }
     }
 

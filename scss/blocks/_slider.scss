@@ -39,6 +39,10 @@
     &_active {
         background: $second-color;
     }
+    &_counter {
+        display: flex;
+        justify-content: center;
+    }
     .title {
         margin: 10px 0;
     }
