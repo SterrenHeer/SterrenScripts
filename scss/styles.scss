@@ -10,5 +10,9 @@ body {
 	max-width: 1644px;
 }
 
+.trans-5 {
+	transition: 0.5s all;
+}
+
 @import 'blocks/title';
 @import 'blocks/slider';
